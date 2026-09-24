@@ -1,1 +1,726 @@
-see computer
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VELVET — Premium Fashion Store</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --cream: #f8f5f0;
+    --gold: #c9a96e;
+    --gold-light: #e8d5b0;
+    --gray: #6b6b6b;
+    --light-gray: #e8e8e8;
+    --red: #c0392b;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family:'Inter',sans-serif; background:#fff; color:var(--black); overflow-x:hidden; }
+  header {
+    position: fixed; top:0; left:0; right:0; z-index:1000;
+    background: rgba(10,10,10,0.95); backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(201,169,110,0.3);
+  }
+  .header-inner {
+    max-width:1400px; margin:0 auto; padding:0 40px;
+    display:flex; align-items:center; justify-content:space-between; height:70px;
+  }
+  .logo { font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:#fff; letter-spacing:4px; text-decoration:none; }
+  .logo span { color:var(--gold); }
+  nav { display:flex; gap:32px; align-items:center; }
+  nav a { color:rgba(255,255,255,0.8); text-decoration:none; font-size:13px; font-weight:500; letter-spacing:1.5px; text-transform:uppercase; transition:color 0.2s; }
+  nav a:hover { color:var(--gold); }
+  .header-actions { display:flex; gap:20px; align-items:center; }
+  .icon-btn { background:none; border:none; cursor:pointer; color:rgba(255,255,255,0.8); font-size:20px; transition:color 0.2s; position:relative; }
+  .icon-btn:hover { color:var(--gold); }
+  .badge { position:absolute; top:-6px; right:-6px; background:var(--gold); color:var(--black); width:18px; height:18px; border-radius:50%; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  .search-bar { display:flex; align-items:center; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:24px; padding:8px 16px; gap:8px; }
+  .search-bar input { background:none; border:none; outline:none; color:#fff; font-size:13px; width:200px; }
+  .search-bar input::placeholder { color:rgba(255,255,255,0.4); }
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+  .hamburger span { display:block; width:24px; height:2px; background:#fff; }
+  .hero { height:100vh; min-height:600px; background:linear-gradient(135deg,#0a0a0a 0%,#1a1208 50%,#0a0a0a 100%); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+  .hero-bg { position:absolute; inset:0; background:url('https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&q=80') center/cover; opacity:0.25; }
+  .hero-content { position:relative; z-index:2; text-align:center; padding:0 20px; }
+  .hero-tag { display:inline-block; color:var(--gold); font-size:12px; letter-spacing:4px; text-transform:uppercase; border:1px solid var(--gold); padding:6px 20px; margin-bottom:30px; animation:fadeInUp 0.8s ease; }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(48px,8vw,100px); font-weight:700; color:#fff; line-height:1; margin-bottom:24px; animation:fadeInUp 0.8s ease 0.2s both; }
+  .hero h1 em { color:var(--gold); font-style:italic; }
+  .hero p { font-size:clamp(14px,2vw,18px); color:rgba(255,255,255,0.7); max-width:500px; margin:0 auto 40px; animation:fadeInUp 0.8s ease 0.4s both; }
+  .hero-btns { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; animation:fadeInUp 0.8s ease 0.6s both; }
+  .btn-primary { background:var(--gold); color:var(--black); padding:16px 40px; font-size:13px; font-weight:600; letter-spacing:2px; text-transform:uppercase; border:none; cursor:pointer; text-decoration:none; display:inline-block; transition:all 0.3s; }
+  .btn-primary:hover { background:var(--gold-light); transform:translateY(-2px); }
+  .btn-outline { background:transparent; color:#fff; padding:16px 40px; font-size:13px; font-weight:600; letter-spacing:2px; text-transform:uppercase; border:1px solid rgba(255,255,255,0.5); cursor:pointer; text-decoration:none; display:inline-block; transition:all 0.3s; }
+  .btn-outline:hover { border-color:#fff; }
+  .scroll-indicator { position:absolute; bottom:30px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; color:rgba(255,255,255,0.4); font-size:11px; letter-spacing:2px; }
+  .scroll-line { width:1px; height:50px; background:var(--gold); animation:scrollAnim 1.5s ease infinite; }
+  @keyframes scrollAnim { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(20px)} }
+  @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  .marquee-wrap { background:var(--gold); padding:12px 0; overflow:hidden; }
+  .marquee { display:flex; gap:60px; animation:marquee 20s linear infinite; width:max-content; }
+  .marquee span { font-size:12px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--black); white-space:nowrap; }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  section { padding:80px 0; }
+  .container { max-width:1400px; margin:0 auto; padding:0 40px; }
+  .section-label { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+  .section-title { font-family:'Playfair Display',serif; font-size:clamp(28px,4vw,48px); font-weight:600; margin-bottom:16px; }
+  .section-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:50px; flex-wrap:wrap; gap:20px; }
+  .view-all { font-size:13px; color:var(--black); text-decoration:none; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid var(--black); padding-bottom:2px; transition:color 0.2s; }
+  .view-all:hover { color:var(--gold); border-color:var(--gold); }
+  .cat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  .cat-card { position:relative; overflow:hidden; cursor:pointer; aspect-ratio:3/4; }
+  .cat-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+  .cat-card:hover img { transform:scale(1.07); }
+  .cat-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 60%); display:flex; align-items:flex-end; padding:24px; }
+  .cat-name { font-family:'Playfair Display',serif; font-size:22px; color:#fff; font-weight:600; }
+  .cat-count { font-size:12px; color:rgba(255,255,255,0.6); margin-top:4px; }
+  .product-filters { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:40px; align-items:center; }
+  .filter-btn { padding:8px 20px; border:1px solid var(--light-gray); background:#fff; cursor:pointer; font-size:13px; transition:all 0.2s; border-radius:24px; }
+  .filter-btn.active,.filter-btn:hover { background:var(--black); color:#fff; border-color:var(--black); }
+  .filter-select { padding:8px 16px; border:1px solid var(--light-gray); background:#fff; font-size:13px; cursor:pointer; border-radius:24px; outline:none; margin-left:auto; }
+  .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:30px; }
+  .product-card { cursor:pointer; position:relative; }
+  .product-img { position:relative; overflow:hidden; aspect-ratio:3/4; background:var(--cream); margin-bottom:16px; }
+  .product-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+  .product-card:hover .product-img img { transform:scale(1.05); }
+  .product-badges { position:absolute; top:12px; left:12px; display:flex; flex-direction:column; gap:6px; }
+  .badge-new { background:var(--black); color:#fff; font-size:10px; font-weight:700; letter-spacing:1.5px; padding:4px 10px; text-transform:uppercase; }
+  .badge-sale { background:var(--red); color:#fff; font-size:10px; font-weight:700; letter-spacing:1.5px; padding:4px 10px; }
+  .product-actions { position:absolute; top:12px; right:12px; display:flex; flex-direction:column; gap:8px; opacity:0; transition:opacity 0.3s; }
+  .product-card:hover .product-actions { opacity:1; }
+  .action-btn { width:36px; height:36px; background:#fff; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; transition:all 0.2s; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+  .action-btn:hover { background:var(--black); color:#fff; }
+  .add-to-cart-btn { position:absolute; bottom:0; left:0; right:0; background:rgba(10,10,10,0.9); color:#fff; border:none; cursor:pointer; padding:12px; font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase; transform:translateY(100%); transition:transform 0.3s; }
+  .product-card:hover .add-to-cart-btn { transform:translateY(0); }
+  .product-info h3 { font-size:15px; font-weight:500; margin-bottom:6px; }
+  .product-info .brand { font-size:12px; color:var(--gray); margin-bottom:6px; }
+  .price-wrap { display:flex; gap:10px; align-items:center; }
+  .price { font-size:16px; font-weight:600; }
+  .price-old { font-size:13px; color:var(--gray); text-decoration:line-through; }
+  .color-dots { display:flex; gap:6px; margin-top:8px; }
+  .color-dot { width:14px; height:14px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px var(--light-gray); cursor:pointer; }
+  .promo-banner { background:var(--black); padding:80px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; position:relative; overflow:hidden; }
+  .promo-text .section-title { color:#fff; }
+  .promo-text p { color:rgba(255,255,255,0.6); font-size:16px; line-height:1.7; margin:20px 0 32px; }
+  .promo-img { position:relative; }
+  .promo-img img { width:100%; height:500px; object-fit:cover; }
+  .promo-stat { position:absolute; bottom:-20px; left:-20px; background:var(--gold); padding:24px 32px; }
+  .promo-stat .num { font-family:'Playfair Display',serif; font-size:40px; font-weight:700; color:var(--black); }
+  .promo-stat .label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--black); }
+  .testimonials-section { background:var(--cream); }
+  .testimonials-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:30px; }
+  .testimonial-card { background:#fff; padding:32px; box-shadow:0 2px 20px rgba(0,0,0,0.05); }
+  .stars { color:var(--gold); font-size:14px; margin-bottom:16px; }
+  .testimonial-text { font-size:15px; line-height:1.7; color:var(--gray); margin-bottom:20px; font-style:italic; }
+  .testimonial-author { font-weight:600; font-size:14px; }
+  .testimonial-role { font-size:12px; color:var(--gray); }
+  .newsletter-section { background:linear-gradient(135deg,var(--black),#1a1208); padding:80px 0; text-align:center; }
+  .newsletter-section .section-title { color:#fff; }
+  .newsletter-form { display:flex; max-width:480px; margin:0 auto; }
+  .newsletter-form input { flex:1; padding:16px 20px; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.05); color:#fff; font-size:14px; outline:none; border-right:none; }
+  .newsletter-form input::placeholder { color:rgba(255,255,255,0.4); }
+  .newsletter-form button { background:var(--gold); color:var(--black); padding:16px 28px; border:none; cursor:pointer; font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; }
+  footer { background:#050505; color:rgba(255,255,255,0.6); padding:60px 0 30px; }
+  .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:60px; margin-bottom:50px; }
+  .footer-col h4 { color:#fff; font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
+  .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .footer-col ul a { color:rgba(255,255,255,0.5); text-decoration:none; font-size:14px; transition:color 0.2s; }
+  .footer-col ul a:hover { color:var(--gold); }
+  .footer-bottom { border-top:1px solid rgba(255,255,255,0.08); padding-top:24px; display:flex; justify-content:space-between; align-items:center; font-size:12px; flex-wrap:wrap; gap:16px; }
+  .social-links { display:flex; gap:16px; }
+  .social-links a { color:rgba(255,255,255,0.4); text-decoration:none; font-size:18px; transition:color 0.2s; }
+  .social-links a:hover { color:var(--gold); }
+  .cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; opacity:0; pointer-events:none; transition:opacity 0.3s; }
+  .cart-overlay.open { opacity:1; pointer-events:all; }
+  .cart-sidebar { position:fixed; top:0; right:-420px; width:420px; height:100%; background:#fff; z-index:2001; padding:30px; overflow-y:auto; transition:right 0.4s cubic-bezier(0.4,0,0.2,1); display:flex; flex-direction:column; }
+  .cart-sidebar.open { right:0; }
+  .cart-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; }
+  .cart-header h2 { font-family:'Playfair Display',serif; font-size:22px; }
+  .close-btn { background:none; border:none; cursor:pointer; font-size:24px; color:var(--gray); }
+  .cart-items { flex:1; overflow-y:auto; }
+  .cart-item { display:grid; grid-template-columns:80px 1fr auto; gap:16px; align-items:center; padding:16px 0; border-bottom:1px solid var(--light-gray); }
+  .cart-item img { width:80px; height:100px; object-fit:cover; }
+  .cart-item-info h4 { font-size:14px; font-weight:500; margin-bottom:4px; }
+  .cart-item-info p { font-size:12px; color:var(--gray); }
+  .qty-ctrl { display:flex; align-items:center; gap:10px; margin-top:8px; }
+  .qty-btn { width:26px; height:26px; border:1px solid var(--light-gray); background:#fff; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
+  .qty-num { font-size:14px; min-width:20px; text-align:center; }
+  .remove-btn { background:none; border:none; cursor:pointer; color:var(--gray); font-size:16px; align-self:flex-start; }
+  .cart-footer { border-top:1px solid var(--light-gray); padding-top:20px; margin-top:20px; }
+  .cart-total { display:flex; justify-content:space-between; font-size:18px; font-weight:600; margin-bottom:20px; }
+  .checkout-btn { width:100%; background:var(--black); color:#fff; padding:16px; border:none; cursor:pointer; font-size:13px; font-weight:600; letter-spacing:2px; text-transform:uppercase; transition:background 0.2s; }
+  .checkout-btn:hover { background:var(--gold); color:var(--black); }
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:3000; opacity:0; pointer-events:none; transition:opacity 0.3s; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.open { opacity:1; pointer-events:all; }
+  .modal { background:#fff; max-width:900px; width:100%; max-height:90vh; overflow-y:auto; display:grid; grid-template-columns:1fr 1fr; transform:scale(0.95); transition:transform 0.3s; }
+  .modal-overlay.open .modal { transform:scale(1); }
+  .modal-img { position:relative; }
+  .modal-img img { width:100%; height:100%; min-height:400px; object-fit:cover; }
+  .modal-close { position:absolute; top:16px; right:16px; background:#fff; border:none; cursor:pointer; width:36px; height:36px; font-size:18px; display:flex; align-items:center; justify-content:center; }
+  .modal-content { padding:40px; }
+  .modal-brand { font-size:12px; color:var(--gray); letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+  .modal-title { font-family:'Playfair Display',serif; font-size:26px; margin-bottom:16px; }
+  .modal-price { font-size:22px; font-weight:600; margin-bottom:24px; }
+  .modal-desc { font-size:14px; color:var(--gray); line-height:1.7; margin-bottom:24px; }
+  .size-label,.color-label { font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
+  .sizes { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+  .size-btn { min-width:44px; height:44px; border:1px solid var(--light-gray); background:#fff; cursor:pointer; font-size:13px; transition:all 0.2s; padding:0 8px; }
+  .size-btn.active,.size-btn:hover { background:var(--black); color:#fff; border-color:var(--black); }
+  .modal-colors { display:flex; gap:10px; margin-bottom:28px; }
+  .modal-color-dot { width:28px; height:28px; border-radius:50%; cursor:pointer; border:3px solid transparent; transition:border-color 0.2s; }
+  .modal-color-dot.active { border-color:var(--black); }
+  .modal-add-btn { width:100%; background:var(--black); color:#fff; padding:16px; border:none; cursor:pointer; font-size:13px; font-weight:600; letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; }
+  .modal-add-btn:hover { background:var(--gold); color:var(--black); }
+  .modal-wish-btn { width:100%; background:#fff; color:var(--black); padding:14px; border:1px solid var(--light-gray); cursor:pointer; font-size:13px; font-weight:600; letter-spacing:2px; text-transform:uppercase; }
+  .toast { position:fixed; bottom:30px; right:30px; background:var(--black); color:#fff; padding:14px 24px; font-size:14px; z-index:9999; transform:translateY(100px); opacity:0; transition:all 0.4s; display:flex; align-items:center; gap:10px; }
+  .toast.show { transform:translateY(0); opacity:1; }
+  .toast .toast-icon { color:var(--gold); font-size:18px; }
+  .page { display:none; }
+  .page.active { display:block; }
+  .page-hero { background:var(--black); padding:100px 0 50px; text-align:center; margin-bottom:60px; }
+  .page-hero h1 { font-family:'Playfair Display',serif; font-size:48px; color:#fff; }
+  .page-hero p { color:rgba(255,255,255,0.5); margin-top:10px; }
+  .breadcrumb { font-size:12px; color:rgba(255,255,255,0.3); margin-top:16px; }
+  .breadcrumb span { color:var(--gold); }
+  .catalog-layout { display:grid; grid-template-columns:260px 1fr; gap:40px; align-items:start; }
+  .filter-sidebar { position:sticky; top:90px; }
+  .filter-group { border-bottom:1px solid var(--light-gray); padding:20px 0; }
+  .filter-group h4 { font-size:12px; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; }
+  .filter-group label { display:flex; align-items:center; gap:10px; font-size:14px; color:var(--gray); cursor:pointer; margin-bottom:8px; }
+  .filter-group input[type=checkbox] { width:16px; height:16px; cursor:pointer; }
+  .price-range-wrap { display:flex; gap:10px; }
+  .price-range-wrap input { width:100%; padding:8px; border:1px solid var(--light-gray); font-size:13px; }
+  .contacts-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; }
+  .contact-form label { display:block; font-size:12px; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; margin-top:20px; }
+  .contact-form input,.contact-form textarea { width:100%; padding:14px; border:1px solid var(--light-gray); font-size:14px; outline:none; font-family:inherit; transition:border-color 0.2s; }
+  .contact-form textarea { height:120px; resize:vertical; }
+  .contact-detail { display:flex; gap:16px; align-items:flex-start; margin-bottom:20px; }
+  .contact-icon { font-size:22px; color:var(--gold); }
+  .contact-detail h4 { font-size:14px; font-weight:600; margin-bottom:4px; }
+  .contact-detail p { font-size:14px; color:var(--gray); }
+  .delivery-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:30px; margin-bottom:60px; }
+  .delivery-card { border:1px solid var(--light-gray); padding:32px; text-align:center; }
+  .delivery-card .icon { font-size:40px; margin-bottom:16px; }
+  .delivery-card h3 { font-size:18px; margin-bottom:10px; font-family:'Playfair Display',serif; }
+  .delivery-card p { font-size:14px; color:var(--gray); line-height:1.6; }
+  .wishlist-empty { text-align:center; padding:100px 20px; }
+  .checkout-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:60px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-field { margin-bottom:20px; }
+  .form-field label { display:block; font-size:12px; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; }
+  .form-field input,.form-field select { width:100%; padding:14px; border:1px solid var(--light-gray); font-size:14px; outline:none; font-family:inherit; background:#fff; }
+  .order-summary { position:sticky; top:90px; background:var(--cream); padding:32px; }
+  .order-summary h3 { font-family:'Playfair Display',serif; font-size:20px; margin-bottom:24px; }
+  .order-line { display:flex; justify-content:space-between; font-size:14px; padding:10px 0; border-bottom:1px solid var(--light-gray); }
+  .order-total { display:flex; justify-content:space-between; font-size:18px; font-weight:700; padding-top:16px; }
+  .demo-notice { background:#fff3cd; border:1px solid #ffc107; padding:16px; font-size:13px; margin-top:20px; color:#856404; }
+  .empty-cart { text-align:center; padding:60px 0; color:var(--gray); }
+  @media(max-width:1024px) {
+    .cat-grid { grid-template-columns:repeat(2,1fr); }
+    .testimonials-grid { grid-template-columns:1fr; }
+    .footer-grid { grid-template-columns:1fr 1fr; gap:40px; }
+    .promo-banner { grid-template-columns:1fr; padding:50px 40px; }
+    .catalog-layout { grid-template-columns:1fr; }
+    .contacts-grid { grid-template-columns:1fr; }
+    .checkout-grid { grid-template-columns:1fr; }
+    .delivery-grid { grid-template-columns:1fr; }
+  }
+  @media(max-width:768px) {
+    .header-inner { padding:0 20px; }
+    nav { display:none; }
+    nav.open { display:flex; flex-direction:column; position:fixed; inset:0; top:70px; background:var(--black); padding:40px; z-index:999; gap:20px; }
+    .hamburger { display:flex; }
+    .search-bar { display:none; }
+    .container { padding:0 20px; }
+    .promo-banner { padding:40px 20px; }
+    .footer-grid { grid-template-columns:1fr; }
+    .modal { grid-template-columns:1fr; }
+    .modal-img img { min-height:250px; }
+    .cart-sidebar { width:100%; right:-100%; }
+    .form-row { grid-template-columns:1fr; }
+    section { padding:50px 0; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo" onclick="showPage('home')">V<span>E</span>LVET</a>
+    <nav id="mainNav">
+      <a href="#" onclick="showPage('catalog')">Каталог</a>
+      <a href="#" onclick="showPage('home');setTimeout(()=>document.getElementById('newSection').scrollIntoView({behavior:'smooth'}),100)">Новинки</a>
+      <a href="#" onclick="showPage('delivery')">Доставка</a>
+      <a href="#" onclick="showPage('contacts')">Контакты</a>
+    </nav>
+    <div class="header-actions">
+      <div class="search-bar"><span>🔍</span><input type="text" id="searchInput" placeholder="Поиск..." oninput="handleSearch(this.value)"></div>
+      <button class="icon-btn" onclick="showPage('wishlist')">❤️<span class="badge" id="wishBadge" style="display:none">0</span></button>
+      <button class="icon-btn" onclick="openCart()">🛍️<span class="badge" id="cartBadge" style="display:none">0</span></button>
+      <div class="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</header>
+
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Новая коллекция 2026</div>
+      <h1>Мода<br>без <em>границ</em></h1>
+      <p>Премиальная одежда, вдохновлённая армянской культурой и мировыми тенденциями</p>
+      <div class="hero-btns">
+        <a href="#" class="btn-primary" onclick="showPage('catalog')">Смотреть коллекцию</a>
+        <a href="#" class="btn-outline" onclick="showPage('home');setTimeout(()=>document.getElementById('newSection').scrollIntoView({behavior:'smooth'}),100)">Новинки</a>
+      </div>
+    </div>
+    <div class="scroll-indicator"><div class="scroll-line"></div><span>SCROLL</span></div>
+  </section>
+  <div class="marquee-wrap"><div class="marquee"><span>Новая коллекция</span><span>★</span><span>Бесплатная доставка от 30,000 AMD</span><span>★</span><span>Возврат 30 дней</span><span>★</span><span>Премиальное качество</span><span>★</span><span>Эксклюзивные дизайны</span><span>★</span><span>Новая коллекция</span><span>★</span><span>Бесплатная доставка от 30,000 AMD</span><span>★</span><span>Возврат 30 дней</span><span>★</span><span>Премиальное качество</span><span>★</span><span>Эксклюзивные дизайны</span><span>★</span></div></div>
+  <section>
+    <div class="container">
+      <div class="section-header"><div><div class="section-label">Навигация</div><h2 class="section-title">Выберите категорию</h2></div></div>
+      <div class="cat-grid">
+        <div class="cat-card" onclick="filterAndShow('men')"><img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=600&q=80" alt="Мужчинам" loading="lazy"><div class="cat-overlay"><div><div class="cat-name">Мужчинам</div><div class="cat-count">12 товаров</div></div></div></div>
+        <div class="cat-card" onclick="filterAndShow('women')"><img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=600&q=80" alt="Женщинам" loading="lazy"><div class="cat-overlay"><div><div class="cat-name">Женщинам</div><div class="cat-count">10 товаров</div></div></div></div>
+        <div class="cat-card" onclick="filterAndShow('shoes')"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80" alt="Обувь" loading="lazy"><div class="cat-overlay"><div><div class="cat-name">Обувь</div><div class="cat-count">6 товаров</div></div></div></div>
+        <div class="cat-card" onclick="filterAndShow('accessories')"><img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80" alt="Аксессуары" loading="lazy"><div class="cat-overlay"><div><div class="cat-name">Аксессуары</div><div class="cat-count">4 товара</div></div></div></div>
+      </div>
+    </div>
+  </section>
+  <section id="newSection">
+    <div class="container">
+      <div class="section-header"><div><div class="section-label">Новое поступление</div><h2 class="section-title">Новинки сезона</h2></div><a href="#" class="view-all" onclick="filterAndShow('new')">Все новинки</a></div>
+      <div class="products-grid" id="homeNewGrid"></div>
+    </div>
+  </section>
+  <section style="padding:0">
+    <div class="container">
+      <div class="promo-banner">
+        <div class="promo-text"><div class="section-label">Эксклюзивно</div><h2 class="section-title">Летняя коллекция 2026</h2><p>Новые силуэты, вдохновлённые средиземноморским летом. Лёгкие ткани, яркие цвета, безупречный крой.</p><a href="#" class="btn-primary" onclick="filterAndShow('women')">Открыть коллекцию</a></div>
+        <div class="promo-img"><img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=800&q=80" alt="Летняя коллекция" loading="lazy"><div class="promo-stat"><div class="num">32</div><div class="label">Товара в коллекции</div></div></div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <div class="container">
+      <div class="section-header"><div><div class="section-label">Бестселлеры</div><h2 class="section-title">Популярные товары</h2></div><a href="#" class="view-all" onclick="showPage('catalog')">Весь каталог</a></div>
+      <div class="products-grid" id="homePopularGrid"></div>
+    </div>
+  </section>
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-header"><div><div class="section-label">Отзывы</div><h2 class="section-title">Что говорят наши клиенты</h2></div></div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-text">«Потрясающее качество! Пальто из новой коллекции просто великолепно сидит. Доставка в Ереван пришла за 2 дня.»</p><div class="testimonial-author">Анна М.</div><div class="testimonial-role">Клиент из Еревана</div></div>
+        <div class="testimonial-card"><div class="stars">★★★★★</div><p class="testimonial-text">«VELVET — лучший магазин одежды в Армении. Стиль, качество и сервис на высшем уровне!»</p><div class="testimonial-author">Давид К.</div><div class="testimonial-role">Постоянный клиент</div></div>
+        <div class="testimonial-card"><div class="stars">★★★★☆</div><p class="testimonial-text">«Отличная подборка. Нашла платье мечты по хорошей цене. Буду рекомендовать всем!»</p><div class="testimonial-author">Мариам С.</div><div class="testimonial-role">Клиент из Гюмри</div></div>
+      </div>
+    </div>
+  </section>
+  <section class="newsletter-section">
+    <div class="container">
+      <div class="section-label" style="color:var(--gold)">Подписка</div>
+      <h2 class="section-title" style="color:#fff">Будьте в курсе новинок</h2>
+      <p style="color:rgba(255,255,255,0.6);margin:16px auto 40px;max-width:400px">Получайте эксклюзивные предложения первыми</p>
+      <form class="newsletter-form" onsubmit="subscribeNewsletter(event)"><input type="email" placeholder="Ваш email адрес" required><button type="submit">Подписаться</button></form>
+    </div>
+  </section>
+</div>
+
+<div class="page" id="page-catalog">
+  <div class="page-hero"><div class="container"><h1>Каталог</h1><p>Весь ассортимент VELVET</p><div class="breadcrumb">Главная / <span>Каталог</span></div></div></div>
+  <div class="container" style="padding-bottom:80px">
+    <div class="catalog-layout">
+      <aside class="filter-sidebar">
+        <h3 style="font-size:14px;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px">Фильтры</h3>
+        <div class="filter-group"><h4>Категория</h4>
+          <label><input type="checkbox" value="men" onchange="applyFilters()"> Мужская одежда</label>
+          <label><input type="checkbox" value="women" onchange="applyFilters()"> Женская одежда</label>
+          <label><input type="checkbox" value="shoes" onchange="applyFilters()"> Обувь</label>
+          <label><input type="checkbox" value="accessories" onchange="applyFilters()"> Аксессуары</label>
+          <label><input type="checkbox" value="new" onchange="applyFilters()"> Новинки</label>
+        </div>
+        <div class="filter-group"><h4>Цена (AMD)</h4><div class="price-range-wrap"><input type="number" id="priceMin" placeholder="От" value="0" oninput="applyFilters()"><input type="number" id="priceMax" placeholder="До" value="500000" oninput="applyFilters()"></div></div>
+        <div class="filter-group"><h4>Размер</h4>
+          <label><input type="checkbox" value="XS" onchange="applyFilters()"> XS</label>
+          <label><input type="checkbox" value="S" onchange="applyFilters()"> S</label>
+          <label><input type="checkbox" value="M" onchange="applyFilters()"> M</label>
+          <label><input type="checkbox" value="L" onchange="applyFilters()"> L</label>
+          <label><input type="checkbox" value="XL" onchange="applyFilters()"> XL</label>
+        </div>
+        <div class="filter-group"><h4>Цвет</h4>
+          <label><input type="checkbox" value="black" onchange="applyFilters()"> Чёрный</label>
+          <label><input type="checkbox" value="white" onchange="applyFilters()"> Белый</label>
+          <label><input type="checkbox" value="beige" onchange="applyFilters()"> Бежевый</label>
+          <label><input type="checkbox" value="brown" onchange="applyFilters()"> Коричневый</label>
+          <label><input type="checkbox" value="blue" onchange="applyFilters()"> Синий</label>
+          <label><input type="checkbox" value="red" onchange="applyFilters()"> Красный</label>
+        </div>
+        <button class="btn-primary" style="width:100%;margin-top:20px" onclick="resetFilters()">Сбросить фильтры</button>
+      </aside>
+      <div>
+        <div class="product-filters">
+          <button class="filter-btn active" onclick="setCatFilter(this,'all')">Все</button>
+          <button class="filter-btn" onclick="setCatFilter(this,'men')">Мужчины</button>
+          <button class="filter-btn" onclick="setCatFilter(this,'women')">Женщины</button>
+          <button class="filter-btn" onclick="setCatFilter(this,'shoes')">Обувь</button>
+          <button class="filter-btn" onclick="setCatFilter(this,'accessories')">Аксессуары</button>
+          <button class="filter-btn" onclick="setCatFilter(this,'new')">Новинки</button>
+          <select class="filter-select" onchange="setSortOrder(this.value)"><option value="default">По умолчанию</option><option value="price-asc">Цена: по возрастанию</option><option value="price-desc">Цена: по убыванию</option><option value="name">По названию</option></select>
+        </div>
+        <div id="catalogResultsCount" style="font-size:13px;color:var(--gray);margin-bottom:20px"></div>
+        <div class="products-grid" id="catalogGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-wishlist">
+  <div class="page-hero"><div class="container"><h1>Избранное</h1><p>Сохранённые товары</p><div class="breadcrumb">Главная / <span>Избранное</span></div></div></div>
+  <div class="container" style="padding-bottom:80px">
+    <div class="products-grid" id="wishlistGrid"></div>
+    <div class="wishlist-empty" id="wishlistEmpty" style="display:none">
+      <div style="font-size:60px;margin-bottom:20px">🤍</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:28px;margin-bottom:12px">Список избранного пуст</h2>
+      <p style="color:var(--gray)">Добавляйте понравившиеся товары, нажав на ❤️</p>
+      <a href="#" class="btn-primary" style="margin-top:24px;display:inline-block" onclick="showPage('catalog')">Перейти в каталог</a>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-delivery">
+  <div class="page-hero"><div class="container"><h1>Доставка и возврат</h1><p>Условия доставки по Армении</p><div class="breadcrumb">Главная / <span>Доставка</span></div></div></div>
+  <div class="container" style="padding-bottom:80px">
+    <div class="delivery-grid">
+      <div class="delivery-card"><div class="icon">🚚</div><h3>Быстрая доставка</h3><p>По Еревану 1-2 дня. По всей Армении 2-5 дней.</p></div>
+      <div class="delivery-card"><div class="icon">🎁</div><h3>Бесплатно от 30,000 AMD</h3><p>При заказе от 30,000 AMD доставка по Еревану бесплатна.</p></div>
+      <div class="delivery-card"><div class="icon">↩️</div><h3>Возврат 30 дней</h3><p>Если товар не подошёл — вернём деньги в течение 30 дней.</p></div>
+    </div>
+    <div style="max-width:700px;margin:0 auto">
+      <h2 style="font-family:'Playfair Display',serif;font-size:28px;margin-bottom:24px">Условия доставки</h2>
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <thead><tr style="background:var(--black);color:#fff"><th style="padding:12px 16px;text-align:left">Тип</th><th style="padding:12px 16px;text-align:left">Срок</th><th style="padding:12px 16px;text-align:left">Стоимость</th></tr></thead>
+        <tbody>
+          <tr style="background:var(--cream)"><td style="padding:12px 16px">Ереван (курьер)</td><td style="padding:12px 16px">1-2 дня</td><td style="padding:12px 16px">1,500 AMD</td></tr>
+          <tr><td style="padding:12px 16px">Регионы Армении</td><td style="padding:12px 16px">3-5 дней</td><td style="padding:12px 16px">2,500 AMD</td></tr>
+          <tr style="background:var(--cream)"><td style="padding:12px 16px">Самовывоз</td><td style="padding:12px 16px">Сегодня</td><td style="padding:12px 16px">Бесплатно</td></tr>
+          <tr><td style="padding:12px 16px">Россия и СНГ</td><td style="padding:12px 16px">7-14 дней</td><td style="padding:12px 16px">от 5,000 AMD</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:24px;font-size:14px;color:var(--gray)">⚠️ Демонстрационные цены.</p>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-contacts">
+  <div class="page-hero"><div class="container"><h1>Контакты</h1><p>Свяжитесь с нами</p><div class="breadcrumb">Главная / <span>Контакты</span></div></div></div>
+  <div class="container" style="padding-bottom:80px">
+    <div class="contacts-grid">
+      <div>
+        <p style="font-size:15px;color:var(--gray);line-height:1.7;margin-bottom:30px">Мы всегда рады помочь! Напишите нам или позвоните.</p>
+        <div class="contact-detail"><div class="contact-icon">📍</div><div><h4>Адрес</h4><p>ул. Абовяна 22, Ереван 0001</p></div></div>
+        <div class="contact-detail"><div class="contact-icon">📞</div><div><h4>Телефон</h4><p>+374 10 123 456</p></div></div>
+        <div class="contact-detail"><div class="contact-icon">✉️</div><div><h4>Email</h4><p>hello@velvetstore.am</p></div></div>
+        <div class="contact-detail"><div class="contact-icon">🕐</div><div><h4>Режим работы</h4><p>Пн-Сб: 10:00–20:00<br>Вс: 11:00–18:00</p></div></div>
+      </div>
+      <div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:24px">Напишите нам</h3>
+        <form class="contact-form" onsubmit="submitContact(event)">
+          <div class="form-row"><div><label>Имя</label><input type="text" placeholder="Ваше имя" required></div><div><label>Email</label><input type="email" placeholder="email@example.com" required></div></div>
+          <label>Тема</label><input type="text" placeholder="Тема сообщения">
+          <label>Сообщение</label><textarea placeholder="Ваше сообщение..." required></textarea>
+          <button type="submit" class="btn-primary" style="margin-top:16px">Отправить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-checkout">
+  <div class="page-hero"><div class="container"><h1>Оформление заказа</h1><div class="breadcrumb">Главная / Корзина / <span>Оформление</span></div></div></div>
+  <div class="container" style="padding-bottom:80px">
+    <div class="demo-notice">⚠️ <strong>Демонстрационный режим.</strong> Реальные платёжные данные вводить не нужно.</div>
+    <div class="checkout-grid" style="margin-top:40px">
+      <div>
+        <h3 style="font-family:'Playfair Display',serif;font-size:22px;margin-bottom:24px">Данные доставки</h3>
+        <div class="form-row"><div class="form-field"><label>Имя</label><input type="text" placeholder="Имя"></div><div class="form-field"><label>Фамилия</label><input type="text" placeholder="Фамилия"></div></div>
+        <div class="form-field"><label>Email</label><input type="email" placeholder="email@example.com"></div>
+        <div class="form-field"><label>Телефон</label><input type="tel" placeholder="+374..."></div>
+        <div class="form-field"><label>Адрес</label><input type="text" placeholder="Улица, дом, квартира"></div>
+        <div class="form-row"><div class="form-field"><label>Город</label><input type="text" placeholder="Ереван"></div><div class="form-field"><label>Индекс</label><input type="text" placeholder="0001"></div></div>
+        <div class="form-field"><label>Способ доставки</label><select><option>Курьер по Еревану — 1,500 AMD</option><option>По Армении — 2,500 AMD</option><option>Самовывоз — Бесплатно</option></select></div>
+        <button class="btn-primary" style="width:100%;margin-top:20px" onclick="submitOrder()">Оформить заказ (демо)</button>
+      </div>
+      <div><div class="order-summary"><h3>Ваш заказ</h3><div id="checkoutItems"></div><div class="order-total"><span>Итого</span><span id="checkoutTotal">0 AMD</span></div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-privacy">
+  <div class="page-hero"><div class="container"><h1>Политика конфиденциальности</h1><div class="breadcrumb">Главная / <span>Конфиденциальность</span></div></div></div>
+  <div class="container" style="padding-bottom:80px;max-width:800px">
+    <div style="font-size:15px;line-height:1.8;color:var(--gray)">
+      <h3 style="color:var(--black);font-family:'Playfair Display',serif;margin:32px 0 12px">1. Сбор данных</h3>
+      <p>Мы собираем только данные, необходимые для обработки заказов: имя, email, адрес доставки. Платёжные данные не хранятся.</p>
+      <h3 style="color:var(--black);font-family:'Playfair Display',serif;margin:32px 0 12px">2. Использование данных</h3>
+      <p>Ваши данные используются только для выполнения заказов и улучшения сервиса. Мы не передаём данные третьим лицам.</p>
+      <h3 style="color:var(--black);font-family:'Playfair Display',serif;margin:32px 0 12px">3. Cookies</h3>
+      <p>Сайт использует cookies для хранения корзины. Контакты: privacy@velvetstore.am</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div><a href="#" class="logo" style="margin-bottom:16px;display:block" onclick="showPage('home')">V<span>E</span>LVET</a><p style="font-size:14px;line-height:1.7;max-width:280px">Премиальный магазин одежды в Армении. Мода, которая вдохновляет.</p></div>
+      <div class="footer-col"><h4>Каталог</h4><ul><li><a href="#" onclick="filterAndShow('men')">Мужчинам</a></li><li><a href="#" onclick="filterAndShow('women')">Женщинам</a></li><li><a href="#" onclick="filterAndShow('shoes')">Обувь</a></li><li><a href="#" onclick="filterAndShow('accessories')">Аксессуары</a></li><li><a href="#" onclick="filterAndShow('new')">Новинки</a></li></ul></div>
+      <div class="footer-col"><h4>Информация</h4><ul><li><a href="#" onclick="showPage('delivery')">Доставка</a></li><li><a href="#" onclick="showPage('contacts')">Контакты</a></li><li><a href="#" onclick="showPage('privacy')">Конфиденциальность</a></li></ul></div>
+      <div class="footer-col"><h4>Контакты</h4><ul><li><a href="tel:+37410123456">+374 10 123 456</a></li><li><a href="mailto:hello@velvetstore.am">hello@velvetstore.am</a></li><li><a href="#">Ереван, ул. Абовяна 22</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 VELVET. Все права защищены. <a href="#" onclick="showPage('privacy')" style="color:var(--gold)">Конфиденциальность</a></span><div class="social-links"><a href="#">📸</a><a href="#">📘</a><a href="#">✈️</a></div></div>
+  </div>
+</footer>
+
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header"><h2>Корзина</h2><button class="close-btn" onclick="closeCart()">✕</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer"><div class="cart-total"><span>Итого</span><span id="cartTotal">0 AMD</span></div><button class="checkout-btn" onclick="goToCheckout()">Оформить заказ</button></div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="productModal">
+    <div class="modal-img"><img id="modalImg" src="" alt=""><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-content">
+      <div class="modal-brand" id="modalBrand"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-price" id="modalPrice"></div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="size-label">Размер</div><div class="sizes" id="modalSizes"></div>
+      <div class="color-label">Цвет</div><div class="modal-colors" id="modalColors"></div>
+      <button class="modal-add-btn" onclick="addFromModal()">Добавить в корзину</button>
+      <button class="modal-wish-btn" id="modalWishBtn" onclick="toggleWishFromModal()">❤️ В избранное</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toastMsg"></span></div>
+
+<script>
+const products=[
+{id:1,name:'Пальто Oversize Classic',brand:'VELVET MEN',category:'men',price:89000,oldPrice:null,colors:['#1a1a1a','#6b4f3a','#4a4a6a'],sizes:['S','M','L','XL'],img:'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&q=80',desc:'Элегантное пальто oversize из шерстяной смеси. Идеально для армянской осени.',isNew:true,isSale:false,tags:['black','brown']},
+{id:2,name:'Льняная рубашка Minimal',brand:'VELVET MEN',category:'men',price:34000,oldPrice:42000,colors:['#f5f0e8','#4a7a9b','#2d4739'],sizes:['S','M','L','XL'],img:'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80',desc:'Лёгкая льняная рубашка с минималистичным кроем. Дышащий материал для жаркого лета.',isNew:false,isSale:true,tags:['beige','blue']},
+{id:3,name:'Зауженные брюки Tailor',brand:'VELVET MEN',category:'men',price:52000,oldPrice:null,colors:['#1a1a1a','#3d3d3d','#8b7355'],sizes:['S','M','L','XL'],img:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80',desc:'Зауженные брюки с идеальной посадкой. Классический крой, современные детали.',isNew:false,isSale:false,tags:['black']},
+{id:4,name:'Кашемировый свитер Luxe',brand:'VELVET MEN',category:'men',price:76000,oldPrice:null,colors:['#c4a882','#1a1a1a','#8b3a3a'],sizes:['S','M','L'],img:'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&q=80',desc:'Мягчайший кашемировый свитер с V-образным вырезом. 100% кашемир категории A.',isNew:true,isSale:false,tags:['beige','black']},
+{id:5,name:'Кожаная куртка Biker',brand:'VELVET MEN',category:'men',price:145000,oldPrice:175000,colors:['#1a1a1a','#3d2b1f'],sizes:['S','M','L','XL'],img:'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&q=80',desc:'Классическая байкерская куртка из натуральной кожи. Металлическая фурнитура.',isNew:false,isSale:true,tags:['black','brown']},
+{id:6,name:'Джинсы Slim Fit Premium',brand:'VELVET MEN',category:'men',price:48000,oldPrice:null,colors:['#2c3e6b','#1a1a1a'],sizes:['S','M','L','XL'],img:'https://images.unsplash.com/photo-1542272604-787c3835535d?w=600&q=80',desc:'Slim fit джинсы из японского денима. Комфортная посадка весь день.',isNew:false,isSale:false,tags:['blue','black']},
+{id:7,name:'Пиджак Structured',brand:'VELVET MEN',category:'men',price:98000,oldPrice:null,colors:['#1a1a1a','#2d3a2d'],sizes:['S','M','L','XL'],img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80',desc:'Строгий пиджак с структурированными плечами. Для офиса и вечеринок.',isNew:true,isSale:false,tags:['black']},
+{id:8,name:'Тренч Classic',brand:'VELVET MEN',category:'men',price:112000,oldPrice:130000,colors:['#c4a882','#1a1a1a'],sizes:['M','L','XL'],img:'https://images.unsplash.com/photo-1520975954732-35dd22299614?w=600&q=80',desc:'Классический двубортный тренч. Незаменим в межсезонье.',isNew:false,isSale:true,tags:['beige','black']},
+{id:9,name:'Поло Premium Cotton',brand:'VELVET MEN',category:'men',price:28000,oldPrice:null,colors:['#1a1a1a','#fff','#4a7a9b'],sizes:['S','M','L','XL'],img:'https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=600&q=80',desc:'Поло из мерсеризованного хлопка. Базовый предмет гардероба.',isNew:false,isSale:false,tags:['black','white','blue']},
+{id:10,name:'Худи Velvet Essential',brand:'VELVET MEN',category:'men',price:42000,oldPrice:null,colors:['#3d3d3d','#c4a882','#fff'],sizes:['S','M','L','XL'],img:'https://images.unsplash.com/photo-1571945153237-4929e783af4a?w=600&q=80',desc:'Oversize худи из тяжёлого флиса. Карман-кенгуру.',isNew:true,isSale:false,tags:['black','beige','white']},
+{id:11,name:'Шорты Linen Bermuda',brand:'VELVET MEN',category:'men',price:22000,oldPrice:28000,colors:['#c4a882','#1a1a1a','#4a7a9b'],sizes:['S','M','L','XL'],img:'https://images.unsplash.com/photo-1591195853828-11db59a44f43?w=600&q=80',desc:'Льняные бермуды для жаркого лета.',isNew:false,isSale:true,tags:['beige','black','blue']},
+{id:12,name:'Водолазка Merino',brand:'VELVET MEN',category:'men',price:36000,oldPrice:null,colors:['#1a1a1a','#8b3a3a','#2d3a2d'],sizes:['S','M','L'],img:'https://images.unsplash.com/photo-1586790170083-2f9ceadc732d?w=600&q=80',desc:'Водолазка из мериносовой шерсти. Мягкая, не колется.',isNew:false,isSale:false,tags:['black','red']},
+{id:13,name:'Вечернее платье Silk Noir',brand:'VELVET WOMEN',category:'women',price:95000,oldPrice:null,colors:['#1a1a1a','#8b3a3a','#2c3e6b'],sizes:['XS','S','M','L'],img:'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?w=600&q=80',desc:'Изысканное вечернее платье из натурального шёлка. Асимметричный вырез.',isNew:true,isSale:false,tags:['black','red','blue']},
+{id:14,name:'Льняной сарафан Provence',brand:'VELVET WOMEN',category:'women',price:58000,oldPrice:72000,colors:['#f5f0e8','#e8c4b8','#a8c4a8'],sizes:['XS','S','M','L'],img:'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=600&q=80',desc:'Лёгкий льняной сарафан в прованском стиле.',isNew:false,isSale:true,tags:['beige','white']},
+{id:15,name:'Блуза шёлковая Fluid',brand:'VELVET WOMEN',category:'women',price:46000,oldPrice:null,colors:['#fff','#f5f0e8','#c4a882'],sizes:['XS','S','M','L'],img:'https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80',desc:'Текучая шёлковая блуза с V-образным вырезом.',isNew:false,isSale:false,tags:['white','beige']},
+{id:16,name:'Брюки палаццо Wide',brand:'VELVET WOMEN',category:'women',price:65000,oldPrice:null,colors:['#1a1a1a','#c4a882','#fff'],sizes:['XS','S','M','L'],img:'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600&q=80',desc:'Широкие брюки палаццо с высокой талией.',isNew:true,isSale:false,tags:['black','beige','white']},
+{id:17,name:'Жакет Bouclé Tweed',brand:'VELVET WOMEN',category:'women',price:88000,oldPrice:105000,colors:['#c4a882','#1a1a1a'],sizes:['XS','S','M','L'],img:'https://images.unsplash.com/photo-1594938298603-c8148c4b4f0d?w=600&q=80',desc:'Жакет из фактурного твида. Золотые пуговицы.',isNew:false,isSale:true,tags:['beige','black']},
+{id:18,name:'Платье-рубашка Oversized',brand:'VELVET WOMEN',category:'women',price:42000,oldPrice:null,colors:['#fff','#4a7a9b','#1a1a1a'],sizes:['XS','S','M','L'],img:'https://images.unsplash.com/photo-1571513722275-4b41940f54b8?w=600&q=80',desc:'Удобное платье-рубашка oversize. С поясом и без.',isNew:true,isSale:false,tags:['white','blue','black']},
+{id:19,name:'Кардиган Merino Luxe',brand:'VELVET WOMEN',category:'women',price:62000,oldPrice:null,colors:['#c4a882','#8b3a3a','#1a1a1a'],sizes:['XS','S','M','L'],img:'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80',desc:'Длинный кардиган из мериносовой шерсти.',isNew:false,isSale:false,tags:['beige','red','black']},
+{id:20,name:'Мини-юбка Leather',brand:'VELVET WOMEN',category:'women',price:54000,oldPrice:68000,colors:['#1a1a1a','#3d2b1f'],sizes:['XS','S','M'],img:'https://images.unsplash.com/photo-1583496661160-fb5974ca0afd?w=600&q=80',desc:'Кожаная мини-юбка с асимметричным запахом.',isNew:false,isSale:true,tags:['black','brown']},
+{id:21,name:'Пальто Cocoon',brand:'VELVET WOMEN',category:'women',price:125000,oldPrice:null,colors:['#c4a882','#1a1a1a','#8b7355'],sizes:['XS','S','M','L'],img:'https://images.unsplash.com/photo-1548624313-0396c75e4b1a?w=600&q=80',desc:'Пальто-кокон объёмного силуэта. Смесь шерсти и кашемира.',isNew:true,isSale:false,tags:['beige','black']},
+{id:22,name:'Топ Satin Slip',brand:'VELVET WOMEN',category:'women',price:32000,oldPrice:null,colors:['#f5f0e8','#1a1a1a','#8b3a3a'],sizes:['XS','S','M','L'],img:'https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=600&q=80',desc:'Атласный топ-комбинация. Минималистичный дизайн.',isNew:false,isSale:false,tags:['beige','black','red']},
+{id:23,name:'Оксфорды Classic',brand:'VELVET SHOES',category:'shoes',price:78000,oldPrice:null,colors:['#1a1a1a','#3d2b1f'],sizes:['39','40','41','42','43'],img:'https://images.unsplash.com/photo-1449505278894-297fdb3edbc1?w=600&q=80',desc:'Классические оксфорды ручной работы. Кожаная подошва.',isNew:false,isSale:false,tags:['black','brown']},
+{id:24,name:'Кроссовки Premium White',brand:'VELVET SHOES',category:'shoes',price:62000,oldPrice:75000,colors:['#fff','#1a1a1a'],sizes:['38','39','40','41','42','43'],img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80',desc:'Премиальные белые кроссовки из натуральной кожи.',isNew:true,isSale:true,tags:['white','black']},
+{id:25,name:'Ботильоны Suede',brand:'VELVET SHOES',category:'shoes',price:89000,oldPrice:null,colors:['#c4a882','#1a1a1a'],sizes:['36','37','38','39','40'],img:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&q=80',desc:'Ботильоны из замши с квадратным каблуком.',isNew:false,isSale:false,tags:['beige','black']},
+{id:26,name:'Лоферы Horsebit Gold',brand:'VELVET SHOES',category:'shoes',price:95000,oldPrice:115000,colors:['#3d2b1f','#1a1a1a'],sizes:['37','38','39','40','41'],img:'https://images.unsplash.com/photo-1515347619252-60a4bf4fff4f?w=600&q=80',desc:'Лоферы с золотой фурнитурой horsebit.',isNew:false,isSale:true,tags:['brown','black']},
+{id:27,name:'Сандалии Summer Strappy',brand:'VELVET SHOES',category:'shoes',price:48000,oldPrice:null,colors:['#c4a882','#1a1a1a','#fff'],sizes:['36','37','38','39','40'],img:'https://images.unsplash.com/photo-1603487742131-4160ec999306?w=600&q=80',desc:'Ремешковые сандалии на платформе.',isNew:true,isSale:false,tags:['beige','black','white']},
+{id:28,name:'Кеды Canvas Premium',brand:'VELVET SHOES',category:'shoes',price:36000,oldPrice:null,colors:['#fff','#1a1a1a','#4a7a9b'],sizes:['38','39','40','41','42','43'],img:'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&q=80',desc:'Классические кеды из хлопкового канваса.',isNew:false,isSale:false,tags:['white','black','blue']},
+{id:29,name:'Сумка Tote Leather',brand:'VELVET ACC',category:'accessories',price:115000,oldPrice:null,colors:['#1a1a1a','#c4a882','#3d2b1f'],sizes:['one size'],img:'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80',desc:'Вместительная сумка-тоут из зернистой кожи.',isNew:true,isSale:false,tags:['black','beige','brown']},
+{id:30,name:'Ремень Double G',brand:'VELVET ACC',category:'accessories',price:42000,oldPrice:52000,colors:['#1a1a1a','#3d2b1f'],sizes:['S','M','L'],img:'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80',desc:'Классический кожаный ремень с металлической пряжкой.',isNew:false,isSale:true,tags:['black','brown']},
+{id:31,name:'Шарф Cashmere Plaid',brand:'VELVET ACC',category:'accessories',price:38000,oldPrice:null,colors:['#c4a882','#8b3a3a','#1a1a1a'],sizes:['one size'],img:'https://images.unsplash.com/photo-1520903943-ce8f5e2e0acf?w=600&q=80',desc:'Кашемировый шарф в клетку. 100% кашемир.',isNew:false,isSale:false,tags:['beige','red','black']},
+{id:32,name:'Очки Aviator Gold',brand:'VELVET ACC',category:'accessories',price:28000,oldPrice:null,colors:['#c9a96e'],sizes:['one size'],img:'https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&q=80',desc:'Классические очки авиатор. Золотая оправа, UV400.',isNew:true,isSale:false,tags:['beige']}
+];
+let cart=JSON.parse(localStorage.getItem('velvet_cart')||'[]');
+let wishlist=JSON.parse(localStorage.getItem('velvet_wish')||'[]');
+let currentModal=null,selectedSize=null,selectedColor=null,activeCatFilter='all',sortOrder='default',searchQuery='';
+document.addEventListener('DOMContentLoaded',()=>{renderHomeNew();renderHomePopular();renderCatalog();updateBadges();});
+function formatPrice(p){return p.toLocaleString('ru-RU')+' AMD';}
+function createProductCard(p){
+  const inWish=wishlist.includes(p.id);
+  const colors=p.colors.map(c=>`<div class="color-dot" style="background:${c}"></div>`).join('');
+  const salePct=p.oldPrice?Math.round((1-p.price/p.oldPrice)*100):0;
+  return `<div class="product-card" data-id="${p.id}">
+    <div class="product-img">
+      <img src="${p.img}" alt="${p.name}" loading="lazy" onclick="openModal(${p.id})">
+      <div class="product-badges">${p.isNew?'<span class="badge-new">New</span>':''}${p.isSale?'<span class="badge-sale">-'+salePct+'%</span>':''}</div>
+      <div class="product-actions">
+        <button class="action-btn" onclick="toggleWish(${p.id},this)">❤️</button>
+        <button class="action-btn" onclick="openModal(${p.id})">🔍</button>
+      </div>
+      <button class="add-to-cart-btn" onclick="addToCart(${p.id})">В корзину</button>
+    </div>
+    <div class="product-info"><div class="brand">${p.brand}</div><h3>${p.name}</h3>
+      <div class="price-wrap"><span class="price">${formatPrice(p.price)}</span>${p.oldPrice?'<span class="price-old">'+formatPrice(p.oldPrice)+'</span>':''}</div>
+      <div class="color-dots">${colors}</div>
+    </div>
+  </div>`;
+}
+function renderHomeNew(){const el=document.getElementById('homeNewGrid');el.innerHTML=products.filter(p=>p.isNew).slice(0,4).map(createProductCard).join('');}
+function renderHomePopular(){const el=document.getElementById('homePopularGrid');el.innerHTML=[...products].sort((a,b)=>b.price-a.price).slice(0,8).map(createProductCard).join('');}
+function getFilteredProducts(){
+  let list=[...products];
+  if(activeCatFilter!=='all')list=list.filter(p=>p.category===activeCatFilter||(activeCatFilter==='new'&&p.isNew));
+  const cats=[...document.querySelectorAll('.filter-sidebar input[type=checkbox]:checked')].map(i=>i.value);
+  const catV=cats.filter(v=>['men','women','shoes','accessories','new'].includes(v));
+  const sizeV=cats.filter(v=>['XS','S','M','L','XL','39','40','41','42','43'].includes(v));
+  const colorV=cats.filter(v=>['black','white','beige','brown','blue','red'].includes(v));
+  const pMin=parseInt(document.getElementById('priceMin')?.value||0)||0;
+  const pMax=parseInt(document.getElementById('priceMax')?.value||500000)||500000;
+  if(catV.length)list=list.filter(p=>catV.includes(p.category)||(catV.includes('new')&&p.isNew));
+  if(sizeV.length)list=list.filter(p=>sizeV.some(s=>p.sizes.includes(s)));
+  if(colorV.length)list=list.filter(p=>colorV.some(c=>p.tags.includes(c)));
+  list=list.filter(p=>p.price>=pMin&&p.price<=pMax);
+  if(searchQuery)list=list.filter(p=>p.name.toLowerCase().includes(searchQuery)||p.brand.toLowerCase().includes(searchQuery));
+  if(sortOrder==='price-asc')list.sort((a,b)=>a.price-b.price);
+  else if(sortOrder==='price-desc')list.sort((a,b)=>b.price-a.price);
+  else if(sortOrder==='name')list.sort((a,b)=>a.name.localeCompare(b.name,'ru'));
+  return list;
+}
+function renderCatalog(){
+  const grid=document.getElementById('catalogGrid'),count=document.getElementById('catalogResultsCount');
+  const list=getFilteredProducts();
+  count.textContent=`Найдено: ${list.length} товаров`;
+  grid.innerHTML=list.length?list.map(createProductCard).join(''):'<p style="color:var(--gray);grid-column:1/-1;text-align:center;padding:60px 0">Товары не найдены.</p>';
+}
+function setCatFilter(btn,cat){document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');activeCatFilter=cat;renderCatalog();}
+function applyFilters(){renderCatalog();}
+function setSortOrder(v){sortOrder=v;renderCatalog();}
+function resetFilters(){
+  document.querySelectorAll('.filter-sidebar input[type=checkbox]').forEach(i=>i.checked=false);
+  document.getElementById('priceMin').value=0;document.getElementById('priceMax').value=500000;
+  activeCatFilter='all';sortOrder='default';
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.filter-btn').classList.add('active');
+  renderCatalog();
+}
+function handleSearch(q){searchQuery=q.toLowerCase().trim();if(searchQuery){showPage('catalog');renderCatalog();}}
+function openModal(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  currentModal=p;selectedSize=null;selectedColor=p.colors[0];
+  document.getElementById('modalImg').src=p.img;
+  document.getElementById('modalBrand').textContent=p.brand;
+  document.getElementById('modalTitle').textContent=p.name;
+  document.getElementById('modalPrice').innerHTML=formatPrice(p.price)+(p.oldPrice?' <span style="font-size:16px;color:var(--gray);text-decoration:line-through">'+formatPrice(p.oldPrice)+'</span>':'');
+  document.getElementById('modalDesc').textContent=p.desc;
+  document.getElementById('modalSizes').innerHTML=p.sizes.map(s=>`<button class="size-btn" onclick="selectSize(this,'${s}')">${s}</button>`).join('');
+  document.getElementById('modalColors').innerHTML=p.colors.map((c,i)=>`<div class="modal-color-dot ${i===0?'active':''}" style="background:${c}" onclick="selectModalColor(this,'${c}')"></div>`).join('');
+  document.getElementById('modalWishBtn').innerHTML=(wishlist.includes(p.id)?'❤️':'🤍')+' В избранное';
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(e){
+  if(e&&e.target!==document.getElementById('modalOverlay')&&!e.target?.classList?.contains('modal-close'))return;
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function selectSize(btn,s){document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selectedSize=s;}
+function selectModalColor(el,c){document.querySelectorAll('.modal-color-dot').forEach(d=>d.classList.remove('active'));el.classList.add('active');selectedColor=c;}
+function addFromModal(){
+  if(!currentModal)return;
+  if(!selectedSize&&currentModal.sizes[0]!=='one size'){showToast('Выберите размер','⚠️');return;}
+  addToCart(currentModal.id,selectedSize||currentModal.sizes[0],selectedColor);
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function toggleWishFromModal(){
+  if(!currentModal)return;
+  toggleWish(currentModal.id,null);
+  document.getElementById('modalWishBtn').innerHTML=(wishlist.includes(currentModal.id)?'❤️':'🤍')+' В избранное';
+}
+function addToCart(id,size,color){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  const sz=size||(p.sizes[0]==='one size'?'one size':null);
+  const key=id+'-'+(sz||'');
+  const ex=cart.find(i=>i.key===key);
+  if(ex)ex.qty++;else cart.push({key,id,size:sz,color:color||p.colors[0],qty:1});
+  saveCart();updateBadges();showToast(`«${p.name}» добавлен в корзину`);openCart();
+}
+function saveCart(){localStorage.setItem('velvet_cart',JSON.stringify(cart));}
+function openCart(){renderCart();document.getElementById('cartOverlay').classList.add('open');document.getElementById('cartSidebar').classList.add('open');document.body.style.overflow='hidden';}
+function closeCart(){document.getElementById('cartOverlay').classList.remove('open');document.getElementById('cartSidebar').classList.remove('open');document.body.style.overflow='';}
+function renderCart(){
+  const el=document.getElementById('cartItems');
+  if(!cart.length){el.innerHTML='<div class="empty-cart"><div style="font-size:50px">🛍️</div><p>Корзина пуста</p></div>';document.getElementById('cartTotal').textContent='0 AMD';return;}
+  el.innerHTML=cart.map(item=>{const p=products.find(x=>x.id===item.id);if(!p)return'';
+    return `<div class="cart-item"><img src="${p.img}" alt="${p.name}">
+      <div class="cart-item-info"><h4>${p.name}</h4><p>${item.size||''}</p>
+        <div class="qty-ctrl"><button class="qty-btn" onclick="changeQty('${item.key}',-1)">−</button><span class="qty-num">${item.qty}</span><button class="qty-btn" onclick="changeQty('${item.key}',1)">+</button></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+        <button class="remove-btn" onclick="removeCartItem('${item.key}')">✕</button>
+        <span style="font-size:15px;font-weight:600">${formatPrice(p.price*item.qty)}</span>
+      </div></div>`;}).join('');
+  const total=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0);},0);
+  document.getElementById('cartTotal').textContent=formatPrice(total);
+}
+function changeQty(key,d){const item=cart.find(i=>i.key===key);if(!item)return;item.qty+=d;if(item.qty<=0)cart=cart.filter(i=>i.key!==key);saveCart();updateBadges();renderCart();}
+function removeCartItem(key){cart=cart.filter(i=>i.key!==key);saveCart();updateBadges();renderCart();}
+function updateBadges(){
+  const cc=cart.reduce((s,i)=>s+i.qty,0),wc=wishlist.length;
+  const cb=document.getElementById('cartBadge'),wb=document.getElementById('wishBadge');
+  cb.textContent=cc;cb.style.display=cc?'flex':'none';
+  wb.textContent=wc;wb.style.display=wc?'flex':'none';
+}
+function goToCheckout(){closeCart();renderCheckout();showPage('checkout');}
+function renderCheckout(){
+  const el=document.getElementById('checkoutItems');
+  el.innerHTML=cart.map(item=>{const p=products.find(x=>x.id===item.id);if(!p)return'';
+    return `<div class="order-line"><span>${p.name} × ${item.qty}</span><span>${formatPrice(p.price*item.qty)}</span></div>`;}).join('');
+  const total=cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0);},0);
+  document.getElementById('checkoutTotal').textContent=formatPrice(total);
+}
+function submitOrder(){showToast('Заказ оформлен! (демо-режим)','🎉');cart=[];saveCart();updateBadges();setTimeout(()=>showPage('home'),1500);}
+function toggleWish(id,btn){
+  const idx=wishlist.indexOf(id);
+  if(idx===-1){wishlist.push(id);showToast('Добавлено в избранное','❤️');}else{wishlist.splice(idx,1);showToast('Удалено из избранного');}
+  localStorage.setItem('velvet_wish',JSON.stringify(wishlist));
+  updateBadges();renderWishlist();renderHomeNew();renderHomePopular();renderCatalog();
+}
+function renderWishlist(){
+  const grid=document.getElementById('wishlistGrid'),empty=document.getElementById('wishlistEmpty');
+  const items=products.filter(p=>wishlist.includes(p.id));
+  if(!items.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';grid.innerHTML=items.map(createProductCard).join('');
+}
+function showPage(page){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const el=document.getElementById('page-'+page);if(el)el.classList.add('active');
+  window.scrollTo(0,0);
+  if(page==='catalog')renderCatalog();
+  if(page==='wishlist')renderWishlist();
+  if(page==='checkout')renderCheckout();
+  closeCart();
+}
+function filterAndShow(cat){
+  activeCatFilter=cat;
+  document.querySelectorAll('.filter-btn').forEach(b=>{
+    const txt=b.textContent.toLowerCase();
+    const match=(cat==='men'&&txt.includes('муж'))||(cat==='women'&&txt.includes('женщ'))||(cat==='shoes'&&txt.includes('обув'))||(cat==='accessories'&&txt.includes('акс'))||(cat==='new'&&txt.includes('новинк'))||(cat==='all'&&txt==='все');
+    b.classList.toggle('active',match);
+  });
+  showPage('catalog');
+}
+function toggleNav(){document.getElementById('mainNav').classList.toggle('open');}
+function subscribeNewsletter(e){e.preventDefault();showToast('Вы подписались!','✉️');e.target.reset();}
+function submitContact(e){e.preventDefault();showToast('Сообщение отправлено!','✉️');e.target.reset();}
+function showToast(msg,icon='✓'){const t=document.getElementById('toast');document.querySelector('.toast-icon').textContent=icon;document.getElementById('toastMsg').textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';closeCart();}});
+</script>
+</body>
+</html>
